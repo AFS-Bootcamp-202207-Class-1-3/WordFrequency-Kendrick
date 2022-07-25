@@ -13,21 +13,16 @@ public class WordFrequencyGame {
 
             try {
 
-                //split the input string with 1 to n pieces of spaces
                 String[] wordsArr = inputStr.split(REGEX);
-
                 List<WordInformation> wordInformationList = new ArrayList<>();
-                for (String word : wordsArr) {
-                    WordInformation wordInformation = new WordInformation(word, 1);
-                    wordInformationList.add(wordInformation);
-                }
+                Arrays.asList(wordsArr).stream().forEach(word->{wordInformationList.add(new WordInformation(word, 1));});
 
-                //get the map for the next step of sizing the same word
-                Map<String, List<WordInformation>> map = getListMap(wordInformationList);
+                Map<String, List<WordInformation>> wordInfoListMap = getWordInfoListMap(wordInformationList);
 
                 wordInformationList.clear();
 
-                new ArrayList<>(map.entrySet()).stream().forEach(entry->{wordInformationList.add(new WordInformation(entry.getKey(),entry.getValue().size()));});
+                // 生成count计数正确的 wordInformationList
+                new ArrayList<>(wordInfoListMap.entrySet()).stream().forEach(entry->{wordInformationList.add(new WordInformation(entry.getKey(),entry.getValue().size()));});
 
                 wordInformationList.sort((info1, info2) -> info2.getWordCount() - info1.getWordCount());
 
@@ -38,15 +33,13 @@ public class WordFrequencyGame {
                 });
                 return joiner.toString();
             } catch (Exception e) {
-
-
                 return "Calculate Error";
             }
         }
     }
 
 
-    private Map<String, List<WordInformation>> getListMap(List<WordInformation> wordInformationList) {
+    private Map<String, List<WordInformation>> getWordInfoListMap(List<WordInformation> wordInformationList) {
         return wordInformationList.stream().collect(Collectors.groupingBy(info -> info.getWord()));
     }
 

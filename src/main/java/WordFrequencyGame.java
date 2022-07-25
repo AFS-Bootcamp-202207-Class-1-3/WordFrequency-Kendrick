@@ -1,8 +1,5 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.StringJoiner;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class WordFrequencyGame {
     private static final String REGEX = "\\s+";
@@ -52,20 +49,7 @@ public class WordFrequencyGame {
 
 
     private Map<String, List<WordInformation>> getListMap(List<WordInformation> wordInformationList) {
-        Map<String, List<WordInformation>> map = new HashMap<>();
-        for (WordInformation wordInformation : wordInformationList) {
-//       map.computeIfAbsent(input.getValue(), k -> new ArrayList<>()).add(input);
-            if (!map.containsKey(wordInformation.getWord())) {
-                ArrayList arr = new ArrayList<>();
-                arr.add(wordInformation);
-                map.put(wordInformation.getWord(), arr);
-            } else {
-                map.get(wordInformation.getWord()).add(wordInformation);
-            }
-        }
-
-
-        return map;
+        return wordInformationList.stream().collect(Collectors.groupingBy(info -> info.getWord()));
     }
 
 

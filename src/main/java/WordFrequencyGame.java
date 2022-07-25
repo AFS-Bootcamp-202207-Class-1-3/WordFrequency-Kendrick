@@ -6,6 +6,7 @@ import java.util.StringJoiner;
 
 public class WordFrequencyGame {
     private static final String REGEX = "\\s+";
+    private static final String DELIMITER = "\n";
 
     public String getWordFrequency(String inputStr) {
 
@@ -35,7 +36,7 @@ public class WordFrequencyGame {
 
                 wordInformationList.sort((w1, w2) -> w2.getWordCount() - w1.getWordCount());
 
-                StringJoiner joiner = new StringJoiner("\n");
+                StringJoiner joiner = new StringJoiner(DELIMITER);
                 for (WordInformation w : wordInformationList) {
                     String s = w.getValue() + " " + w.getWordCount();
                     joiner.add(s);

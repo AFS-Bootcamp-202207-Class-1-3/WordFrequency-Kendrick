@@ -38,7 +38,9 @@ public class WordFrequencyGame {
 
                 StringJoiner joiner = new StringJoiner(DELIMITER);
 
-                wordInformationList.stream().forEach(info->{joiner.add(info.getWord() + " " + info.getWordCount());});
+                wordInformationList.stream().forEach(info -> {
+                    joiner.add(info.getWord() + " " + info.getWordCount());
+                });
                 return joiner.toString();
             } catch (Exception e) {
 

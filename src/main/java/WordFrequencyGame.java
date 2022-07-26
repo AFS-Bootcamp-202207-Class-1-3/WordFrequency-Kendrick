@@ -8,29 +8,23 @@ public class WordFrequencyGame {
 
     public String getWordFrequency(String inputStr) {
 
-        if (inputStr.split(REGEX).length == 1) {
-            return inputStr + " 1";
-        } else {
+        try {
+            String[] wordsArr = inputStr.split(REGEX);
+            List<WordInformation> wordInformationList = new ArrayList<>();
+            Arrays.asList(wordsArr).stream().forEach(word -> {
+                wordInformationList.add(new WordInformation(word, 1));
+            });
 
-            try {
+            Map<String, List<WordInformation>> wordInfoListMap = getWordInfoListMap(wordInformationList);
 
-                String[] wordsArr = inputStr.split(REGEX);
-                List<WordInformation> wordInformationList = new ArrayList<>();
-                Arrays.asList(wordsArr).stream().forEach(word->{wordInformationList.add(new WordInformation(word, 1));});
+            wordInformationList.clear();
+            generateWordInformationList(wordInfoListMap, wordInformationList);
 
-                Map<String, List<WordInformation>> wordInfoListMap = getWordInfoListMap(wordInformationList);
+            wordInformationList.sort((info1, info2) -> info2.getWordCount() - info1.getWordCount());
 
-                wordInformationList.clear();
-
-                // generate wordInformationList
-                new ArrayList<>(wordInfoListMap.entrySet()).stream().forEach(entry->{wordInformationList.add(new WordInformation(entry.getKey(),entry.getValue().size()));});
-
-                wordInformationList.sort((info1, info2) -> info2.getWordCount() - info1.getWordCount());
-
-                return getStringResult(wordInformationList);
-            } catch (Exception e) {
-                return ERROR_MESSAGE;
-            }
+            return getStringResult(wordInformationList);
+        } catch (Exception e) {
+            return ERROR_MESSAGE;
         }
     }
 
@@ -39,7 +33,7 @@ public class WordFrequencyGame {
         return wordInformationList.stream().collect(Collectors.groupingBy(info -> info.getWord()));
     }
 
-    private String getStringResult(List<WordInformation> wordInformationList){
+    private String getStringResult(List<WordInformation> wordInformationList) {
         StringJoiner joiner = new StringJoiner(DELIMITER);
 
         wordInformationList.stream().forEach(info -> {
@@ -47,6 +41,13 @@ public class WordFrequencyGame {
         });
 
         return joiner.toString();
+    }
+
+    private void generateWordInformationList(Map<String, List<WordInformation>> wordInfoListMap, List<WordInformation> wordInformationList) {
+        // generate wordInformationList
+        new ArrayList<>(wordInfoListMap.entrySet()).stream().forEach(entry -> {
+            wordInformationList.add(new WordInformation(entry.getKey(), entry.getValue().size()));
+        });
     }
 
 }

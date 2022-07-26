@@ -4,6 +4,7 @@ import java.util.stream.Collectors;
 public class WordFrequencyGame {
     private static final String REGEX = "\\s+";
     private static final String DELIMITER = "\n";
+    private static final String ERROR_MESSAGE = "Calculate Error";
 
     public String getWordFrequency(String inputStr) {
 
@@ -21,19 +22,14 @@ public class WordFrequencyGame {
 
                 wordInformationList.clear();
 
-                // 生成count计数正确的 wordInformationList
+                // generate wordInformationList
                 new ArrayList<>(wordInfoListMap.entrySet()).stream().forEach(entry->{wordInformationList.add(new WordInformation(entry.getKey(),entry.getValue().size()));});
 
                 wordInformationList.sort((info1, info2) -> info2.getWordCount() - info1.getWordCount());
 
-                StringJoiner joiner = new StringJoiner(DELIMITER);
-
-                wordInformationList.stream().forEach(info -> {
-                    joiner.add(info.getWord() + " " + info.getWordCount());
-                });
-                return joiner.toString();
+                return getStringResult(wordInformationList);
             } catch (Exception e) {
-                return "Calculate Error";
+                return ERROR_MESSAGE;
             }
         }
     }
@@ -43,5 +39,14 @@ public class WordFrequencyGame {
         return wordInformationList.stream().collect(Collectors.groupingBy(info -> info.getWord()));
     }
 
+    private String getStringResult(List<WordInformation> wordInformationList){
+        StringJoiner joiner = new StringJoiner(DELIMITER);
+
+        wordInformationList.stream().forEach(info -> {
+            joiner.add(info.getWord() + " " + info.getWordCount());
+        });
+
+        return joiner.toString();
+    }
 
 }

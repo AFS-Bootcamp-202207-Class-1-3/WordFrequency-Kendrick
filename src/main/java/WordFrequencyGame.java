@@ -4,7 +4,7 @@ import java.util.stream.Collectors;
 public class WordFrequencyGame {
     private static final String REGEX = "\\s+";
     private static final String DELIMITER = "\n";
-    private static final String ERROR_MESSAGE = "Calculate Error";
+
 
     public String getWordFrequency(String inputStr) {
 
@@ -23,17 +23,17 @@ public class WordFrequencyGame {
             wordInformationList.sort((info1, info2) -> info2.getWordCount() - info1.getWordCount());
 
             return getStringResult(wordInformationList);
-        } catch (Exception e) {
-            return ERROR_MESSAGE;
+        } catch (SecurityException e) {
+            return e.getMessage();
         }
     }
 
 
-    private Map<String, List<WordInformation>> getWordInfoListMap(List<WordInformation> wordInformationList) {
+    private Map<String, List<WordInformation>> getWordInfoListMap(List<WordInformation> wordInformationList) throws SecurityException{
         return wordInformationList.stream().collect(Collectors.groupingBy(info -> info.getWord()));
     }
 
-    private String getStringResult(List<WordInformation> wordInformationList) {
+    private String getStringResult(List<WordInformation> wordInformationList) throws SecurityException{
         StringJoiner joiner = new StringJoiner(DELIMITER);
 
         wordInformationList.stream().forEach(info -> {
@@ -43,7 +43,7 @@ public class WordFrequencyGame {
         return joiner.toString();
     }
 
-    private void generateWordInformationList(Map<String, List<WordInformation>> wordInfoListMap, List<WordInformation> wordInformationList) {
+    private void generateWordInformationList(Map<String, List<WordInformation>> wordInfoListMap, List<WordInformation> wordInformationList) throws SecurityException{
         // generate wordInformationList
         new ArrayList<>(wordInfoListMap.entrySet()).stream().forEach(entry -> {
             wordInformationList.add(new WordInformation(entry.getKey(), entry.getValue().size()));
